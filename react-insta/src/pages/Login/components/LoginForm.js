@@ -1,18 +1,57 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const LoginForm = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const navigate = useNavigate();
+
+    function validateEmail(email) {
+        // 이메일 형식인지 확인하는 정규표현식
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    useEffect(() => {
+        if (validateEmail(email) && password.length >= 7) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+    }, [email, password]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (email === "test@test.com" && password === "1234567") {
+            alert("정상적으로 로그인 되었습니다.");
+            navigate("/");
+        } else {
+            alert("이메일 또는 비밀번호가 올바르지 않습니다.");
+            setEmail("");
+            setPassword("");
+        }
+    };
+
     return (
-        <form class="loginForm">
+        <form class="loginForm" onSubmit={handleSubmit}>
             <InputBox>
                 <EmailInput
                     type="text"
                     class="email"
                     placeholder="전화번호, 사용자 이름 또는 이메일"
+                    onInput={(e) => setEmail(e.target.value)}
                 />
-                <PwInput type="password" class="pw" placeholder="비밀번호" />
+                <PwInput
+                    type="password"
+                    class="pw"
+                    placeholder="비밀번호"
+                    onInput={(e) => setPassword(e.target.value)}
+                />
             </InputBox>
             <div class="buttonBox">
-                <Button type="submit" disabled>
+                <Button type="submit" disabled={isButtonDisabled}>
                     로그인
                 </Button>
             </div>

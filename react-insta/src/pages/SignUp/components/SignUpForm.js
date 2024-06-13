@@ -1,20 +1,70 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const SignUpForm = () => {
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [nickname, setNickname] = useState("");
+    const [password, setPassword] = useState("");
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const navigate = useNavigate();
+
+    function validateEmail(email) {
+        // 이메일 형식인지 확인하는 정규표현식
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    useEffect(() => {
+        if (
+            validateEmail(email) &&
+            name.length &&
+            nickname &&
+            password.length >= 7
+        ) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+    }, [email, name, nickname, password]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        alert("정상적으로 회원가입 되었습니다.");
+        navigate("/");
+    };
+
     return (
-        <form class="joinForm">
+        <form class="joinForm" onSubmit={handleSubmit}>
             <InputBox>
                 <Input
                     type="text"
                     class="email"
                     placeholder="휴대폰 번호 또는 이메일 주소"
+                    onInput={(e) => setEmail(e.target.value)}
                 />
-                <Input type="text" class="name" placeholder="성명" />
-                <Input type="text" class="nickname" placeholder="사용자 이름" />
-                <PwInput type="password" class="pw" placeholder="비밀번호" />
+                <Input
+                    type="text"
+                    class="name"
+                    placeholder="성명"
+                    onInput={(e) => setName(e.target.value)}
+                />
+                <Input
+                    type="text"
+                    class="nickname"
+                    placeholder="사용자 이름"
+                    onInput={(e) => setNickname(e.target.value)}
+                />
+                <PwInput
+                    type="password"
+                    class="pw"
+                    placeholder="비밀번호"
+                    onInput={(e) => setPassword(e.target.value)}
+                />
             </InputBox>
             <div class="buttonBox">
-                <Button type="submit" disabled>
+                <Button type="submit" disabled={isButtonDisabled}>
                     가입
                 </Button>
             </div>
