@@ -3,6 +3,8 @@ import Main from "./pages/Main/Main";
 import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
 import { Route, Routes } from "react-router-dom";
+import ProfileEdit from "./pages/Main/components/ProfileEdit";
+import ImagePost from "./pages/Upload/ImagePost";
 
 function App() {
     return (
@@ -12,6 +14,8 @@ function App() {
                 <Route path="/" element={<Main />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />
+                <Route path="/profileEdit" element={<ProfileEdit />} />
+                <Route path="/imagePost" element={<ImagePost />} />
             </Routes>
         </div>
     );

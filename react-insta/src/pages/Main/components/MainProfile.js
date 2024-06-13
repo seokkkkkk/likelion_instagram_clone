@@ -1,5 +1,11 @@
 import styled from "styled-components";
 import profileImg from "../../../images/profile.png";
+import { Link } from "react-router-dom";
+
+const StyledLink = styled(Link)`
+    text-decoration: none;
+    color: inherit;
+`;
 
 const MainProfile = () => {
     return (
@@ -20,7 +26,11 @@ const MainProfile = () => {
                         <div>
                             <h3>융석</h3>
                         </div>
-                        <button type="button">Edit Profile</button>
+                        <div className="editBtn">
+                            <StyledLink to="/profileEdit">
+                                Edit Profile
+                            </StyledLink>
+                        </div>
                         <div>
                             <ProfileInfo>
                                 <li>서울과학기술대학교</li>
@@ -44,6 +54,19 @@ const MainProfile = () => {
 };
 
 const Profile = styled.div`
+    @media all and (max-width: 767px) {
+        font-size: 80%;
+    }
+    .editBtn {
+        width: 100px;
+        padding: 5px;
+        text-align: center;
+        background-color: lightgray;
+        border-radius: 5px;
+    }
+    .editBtn:hover {
+        cursor: pointer;
+    }
     display: flex;
     flex-direction: row;
     margin: 30px;

@@ -20,7 +20,6 @@ const Main = () => {
 export default Main;
 
 const MainContainer = styled.body`
-    margin: 0 200px;
     overflow: hidden;
 `;
 
