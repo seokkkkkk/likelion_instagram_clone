@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const SignUpForm = () => {
+    const baseURL = "http://127.0.0.1:8080";
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [nickname, setNickname] = useState("");
@@ -29,10 +30,37 @@ const SignUpForm = () => {
         }
     }, [email, name, nickname, password]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert("정상적으로 회원가입 되었습니다.");
-        navigate("/");
+
+        try {
+            const response = await fetch(`${baseURL}/insta/user/signup`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                    name: name,
+                    nickname: nickname,
+                }),
+            });
+
+            if (response.status === 201) {
+                alert("회원가입 성공!");
+                navigate(`/login`);
+            } else if (response.status === 500) {
+                alert("회원가입 실패!");
+            } else if (response.status === 409) {
+                alert("회원가입 실패!");
+            } else {
+                alert("회원가입 실패!");
+            }
+        } catch (error) {
+            console.error("네트워크 오류:", error); // 네트워크 오류 등을 콘솔에 출력
+            alert("회원가입 실패!");
+        }
     };
 
     return (

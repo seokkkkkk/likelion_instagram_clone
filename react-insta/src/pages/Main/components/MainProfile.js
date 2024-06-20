@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import profileImg from "../../../images/profile.png";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const StyledLink = styled(Link)`
     text-decoration: none;
@@ -8,6 +9,47 @@ const StyledLink = styled(Link)`
 `;
 
 const MainProfile = () => {
+    const [profile, setProfile] = useState({
+        name: "",
+        nickname: "",
+    });
+
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const memberId = localStorage.getItem("id");
+
+        const fetchProfileInfo = async () => {
+            try {
+                const response = await fetch(
+                    `http://127.0.0.1:8080/insta/user/${memberId}/info`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                setProfile({
+                    name: data.name,
+                    nickname: data.nickname,
+                });
+            } catch (error) {
+                console.error(
+                    "프로필을 불러오는 데에 오류가 발생했습니다",
+                    error
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProfileInfo();
+    }, []);
+
     return (
         <header>
             <Profile>
@@ -23,8 +65,11 @@ const MainProfile = () => {
                 </ProfileLeft>
                 <div>
                     <div>
-                        <div>
-                            <h3>융석</h3>
+                        <div className="nickname">
+                            <h3>
+                                {loading ? "Loading...." : profile.nickname}
+                            </h3>
+                            {loading ? "Loading...." : profile.name}
                         </div>
                         <div className="editBtn">
                             <StyledLink to="/profileEdit">

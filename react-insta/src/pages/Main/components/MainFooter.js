@@ -42,6 +42,10 @@ const FooterContainer = styled.footer`
     align-items: center;
     background-color: white;
     border-top: 1px solid gray;
+
+    @media (max-width: 1024px) {
+        width: calc(100%);
+    }
 `;
 
 export default MainFooter;

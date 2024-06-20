@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import arrow from "../../images/arrow.png";
 
 const StyledLink = styled(Link)`
@@ -145,6 +145,15 @@ const ImagePost = () => {
     const [caption, setCaption] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
+    const [memberId, setMemberId] = useState(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const memberId = localStorage.getItem("id");
+        if (memberId) {
+            setMemberId(memberId);
+        }
+    }, []);
 
     const handleChange = (event) => {
         const text = event.target.value;
@@ -171,7 +180,40 @@ const ImagePost = () => {
         setSelectedFile(null);
     };
 
-    const upload = () => {};
+    const upload = async () => {
+        try {
+            if (!selectedFile) {
+                alert("사진을 선택해주세요.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("image", selectedFile);
+            formData.append("context", caption);
+            formData.append("memberId", memberId);
+
+            const response = await fetch("http://127.0.0.1:8080/insta/upload", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    // "Content-Type" : "multipart/form-data",
+                },
+                credentials: "include",
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const textResponse = await response.text();
+            console.log("업로드 성공 - 게시글 id:", textResponse);
+            alert("성공적으로 업로드 되었습니다!");
+            navigate("/");
+        } catch (error) {
+            console.error("업로드 에러:", error);
+            alert("업로드 중 오류가 발생했습니다.");
+        }
+    };
 
     return (
         <ImagePostContainer>

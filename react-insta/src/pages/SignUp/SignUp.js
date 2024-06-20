@@ -19,6 +19,7 @@ const SignContainer = styled.body`
     width: 350px;
     margin: 100px auto 0;
     min-height: 500px;
+    overflow: hidden;
 `;
 
 const SignBox = styled.div`
